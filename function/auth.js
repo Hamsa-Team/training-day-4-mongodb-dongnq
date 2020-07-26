@@ -19,12 +19,12 @@ exports.signup = async ctx => {
 
 exports.login = async ctx => {
     const { username, password } = ctx.request.body;
-    const user = await ctx.db.collection('users').find({ username: username }).toArray();
-    const res = Bcrypt.compareSync(password, user[0].password);
-    if (res) {
+    const user = await ctx.db.collection('users').findOne({ username });
+    if (user && Bcrypt.compareSync(password, user.password)) {
         ctx.session.login = user;
         ctx.body = "login successfully";
-    } else {
+    }
+    else {
         ctx.throw(401, 'Unauthorized')
     }
 }

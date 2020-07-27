@@ -18,6 +18,6 @@ exports.getEmployees = async ctx => {
     const { name } = ctx.request.query;
     const result = name
         ? await ctx.db.collection('employees').findOne({ employee_name: name })
-        : await ctx.db.collection('employees').find().toArray();
+        : await ctx.db.collection('employees').find();
     ctx.body = result;
 }

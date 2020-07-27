@@ -3,17 +3,21 @@ const saltRounds = 10;
 
 exports.signup = async ctx => {
     const { username, password } = ctx.request.body;
-
-    const user = {
-        username: username,
-        password: await Bcrypt.hashSync(password, saltRounds)
-    }
-
-    const res = await ctx.db.collection('users').insertOne(user);
-    if (res) {
-        ctx.body = "Signup successfully";
+    const checkUserExists = await ctx.db.collection('users').findOne({ username });
+    if (checkUserExists) {
+        ctx.body = "username already exists!"
     } else {
-        ctx.body = "Please try again later";
+        const user = {
+            username: username,
+            password: await Bcrypt.hashSync(password, saltRounds)
+        }
+
+        const res = await ctx.db.collection('users').insertOne(user);
+        if (res) {
+            ctx.body = "Signup successfully";
+        } else {
+            ctx.body = "Please try again later";
+        }
     }
 }
 

@@ -5,15 +5,17 @@ const Session = require('koa-session')
 const AuthRouter = require("./router/auth.js");
 const HomeRouter = require("./router/home.js");
 const EmployeeRouter = require("./router/employee.js");
-
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 const app = new Koa();
 app.keys = ["KoaJS"];
 
 app
     .use(Mongo({
-        host: 'localhost',
-        port: 27017,
-        db: 'training',
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        db: process.env.DB_NAME,
     }))
     .use(Session(app))
     .use(KoaBody({ multipart: true }))
@@ -21,5 +23,4 @@ app
     .use(HomeRouter.routes())
     .use(EmployeeRouter.routes());
 
-
-app.listen(3000, () => { console.log('running on port 3000') });
+app.listen(process.env.PORT, () => { console.log('running on port 3000') });

@@ -23,4 +23,4 @@ app
     .use(HomeRouter.routes())
     .use(EmployeeRouter.routes());
 
-app.listen(process.env.PORT, () => { console.log('running on port 3000') });
+app.listen(process.env.PORT, () => { console.log(`running on port ${process.env.PORT}`) });
